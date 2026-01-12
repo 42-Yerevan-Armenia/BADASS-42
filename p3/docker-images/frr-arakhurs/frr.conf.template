@@ -1,0 +1,24 @@
+frr version 8.1
+frr defaults traditional
+hostname spine1
+log stdout
+
+router ospf
+ network 192.168.0.0/24 area 0
+ ospf router-id 1.1.1.1
+
+router bgp 65001
+ bgp router-id 1.1.1.1
+ bgp cluster-id 1.1.1.1
+
+ neighbor LEAVES peer-group
+ neighbor LEAVES remote-as 65001
+
+ neighbor 192.168.0.11 peer-group LEAVES
+ neighbor 192.168.0.12 peer-group LEAVES
+ neighbor 192.168.0.13 peer-group LEAVES
+
+ address-family l2vpn evpn
+  neighbor LEAVES activate
+  advertise-all-vni
+ exit-address-family

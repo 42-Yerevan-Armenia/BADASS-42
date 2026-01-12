@@ -1,0 +1,14 @@
+Sep 05 11:23:58.722 HYPERVISOR: Release 0.2.23-amd64/Linux (tag 2023010200)
+Sep 05 11:23:58.722 HYPERVISOR: Started on IP = 127.0.0.1, TCP port = 52041.
+Sep 05 11:23:58.724 HYPERVISOR: exec_cmd: hypervisor version 
+Sep 05 11:23:58.724 HYPERVISOR: exec_cmd: hypervisor working_dir /home/vboxuser/GNS3/projects/p2/project-files/dynamips 
+Sep 05 11:23:58.724 GENERAL: working_dir=/home/vboxuser/GNS3/projects/p2/project-files/dynamips
+Sep 05 11:23:58.724 HYPERVISOR: exec_cmd: ethsw create Switch1 
+Sep 05 11:24:01.057 HYPERVISOR: exec_cmd: nio create_udp udp-7735c312-7304-4da4-b3de-678084d99977 10003 127.0.0.1 10002 
+Sep 05 11:24:01.058 HYPERVISOR: exec_cmd: ethsw add_nio Switch1 udp-7735c312-7304-4da4-b3de-678084d99977 
+Sep 05 11:24:01.059 HYPERVISOR: exec_cmd: ethsw set_access_port Switch1 udp-7735c312-7304-4da4-b3de-678084d99977 1 
+Sep 05 11:24:01.102 HYPERVISOR: exec_cmd: nio create_udp udp-2c0676e0-898d-4573-8120-13c660edb26d 10004 127.0.0.1 10005 
+Sep 05 11:24:01.102 HYPERVISOR: exec_cmd: ethsw add_nio Switch1 udp-2c0676e0-898d-4573-8120-13c660edb26d 
+Sep 05 11:24:01.104 HYPERVISOR: exec_cmd: ethsw set_access_port Switch1 udp-2c0676e0-898d-4573-8120-13c660edb26d 1 
+Sep 05 11:45:25.931 HYPERVISOR: exec_cmd: nio bind_filter udp-7735c312-7304-4da4-b3de-678084d99977 2 capture 
+Sep 05 11:45:25.942 HYPERVISOR: exec_cmd: nio setup_filter udp-7735c312-7304-4da4-b3de-678084d99977 2 en10mb /home/vboxuser/GNS3/projects/p2/project-files/captures/router-arakhurs-1_eth0_to_Switch1_Ethernet0.pcap 
