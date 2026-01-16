@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-IP_UNDERLAY="10.1.1.2"
+IP_UNDERLAY="10.1.1.3"
 ip addr add ${IP_UNDERLAY}/24 dev eth0
 ip link set eth0 up
 
@@ -17,7 +17,7 @@ ip link set vxlan10 up
 FRR_CONF="/etc/frr/frr.conf"
 
 cat > ${FRR_CONF} <<EOF
-hostname leaf2
+hostname leaf3
 !
 router ospf
  network 10.1.1.0/24 area 0

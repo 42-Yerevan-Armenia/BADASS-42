@@ -1,3 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+set -e
+
+# Assign IP to host
+ip addr add 10.1.1.11/24 dev eth0
 ip link set eth0 up
-ip addr add 10.0.10.1/24 dev eth0
+
+# Set default gateway to leaf2
+ip route add default via 10.1.1.2
