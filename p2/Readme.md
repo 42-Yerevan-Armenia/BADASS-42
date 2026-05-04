@@ -29,16 +29,18 @@ chmod +x /root/router2.sh
 ## Host1 Script
 echo '#!/bin/sh
 set -e
-ip addr add 10.0.10.1/24 dev eth0
+ip addr add 10.1.1.11/24 dev eth0
 ip link set eth0 up
+ip route add default via 10.1.1.1 dev eth0
 ' > /root/host1.sh
 chmod +x /root/host1.sh
 
 ## Host2 Script
 echo '#!/bin/sh
 set -e
-ip addr add 10.0.10.2/24 dev eth0
+ip addr add 10.1.1.12/24 dev eth0
 ip link set eth0 up
+ip route add default via 10.1.1.2 dev eth0
 ' > /root/host2.sh
 chmod +x /root/host2.sh
 

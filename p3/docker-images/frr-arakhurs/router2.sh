@@ -2,6 +2,11 @@
 set -e
 
 IP_UNDERLAY="10.1.1.2"
+ip link del vxlan10 2>/dev/null || true
+ip link set br0 down 2>/dev/null || true
+ip link del br0 2>/dev/null || true
+
+ip addr del ${IP_UNDERLAY}/24 dev eth0 2>/dev/null || true
 ip addr add ${IP_UNDERLAY}/24 dev eth0
 ip link set eth0 up
 
