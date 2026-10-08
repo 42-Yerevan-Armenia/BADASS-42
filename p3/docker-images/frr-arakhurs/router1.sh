@@ -1,58 +1,41 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
 
-# --------------------------
-# Underlay IP (Spine)
-# --------------------------
-IP_UNDERLAY="10.1.1.1"
-ip link del vxlan10 2>/dev/null || true
-ip link set br0 down 2>/dev/null || true
-ip link del br0 2>/dev/null || true
-
-ip addr del ${IP_UNDERLAY}/24 dev eth0 2>/dev/null || true
-ip addr add ${IP_UNDERLAY}/24 dev eth0
+# Route reflector: eth0, eth1 and eth2 each connect to a leaf VTEP.
+ip addr flush dev eth0
+ip addr flush dev eth1
+ip addr flush dev eth2
+ip addr add 10.1.1.1/30 dev eth0
+ip addr add 10.1.1.5/30 dev eth1
+ip addr add 10.1.1.9/30 dev eth2
 ip link set eth0 up
-
-# --------------------------
-# Bridge creation
-# --------------------------
-ip link add br0 type bridge
-ip link set br0 up
-ip link set eth1 master br0
 ip link set eth1 up
+ip link set eth2 up
 
-# --------------------------
-# VXLAN overlay
-# --------------------------
-ip link add name vxlan10 type vxlan id 10 dev eth0 group 239.1.1.1 dstport 4789
-ip link set vxlan10 master br0
-ip link set vxlan10 up
-
-# --------------------------
-# Dynamic FRR config (Spine / RR)
-# --------------------------
-FRR_CONF="/etc/frr/frr.conf"
-
-cat > ${FRR_CONF} <<EOF
-hostname spine1
+cat > /etc/frr/frr.conf <<'EOF'
+hostname rr-arakhurs
 !
-router ospf
- network 10.1.1.0/24 area 0
- ospf router-id ${IP_UNDERLAY}
+interface lo
+ ip address 1.1.1.1/32
 !
 router bgp 65001
- bgp router-id ${IP_UNDERLAY}
- bgp cluster-id ${IP_UNDERLAY}
- neighbor LEAVES peer-group
- neighbor LEAVES remote-as 65001
- neighbor 10.1.1.2 peer-group LEAVES
- neighbor 10.1.1.3 peer-group LEAVES
- neighbor 10.1.1.4 peer-group LEAVES
+ bgp router-id 1.1.1.1
+ bgp cluster-id 1.1.1.1
+ neighbor EVPN-LEAVES peer-group
+ neighbor EVPN-LEAVES remote-as 65001
+ neighbor EVPN-LEAVES update-source lo
+ bgp listen range 1.1.1.0/29 peer-group EVPN-LEAVES
  address-family l2vpn evpn
-  neighbor LEAVES activate
-  advertise-all-vni
+  neighbor EVPN-LEAVES activate
+  neighbor EVPN-LEAVES route-reflector-client
  exit-address-family
+!
+router ospf
+ ospf router-id 1.1.1.1
+ network 10.1.1.0/30 area 0
+ network 10.1.1.4/30 area 0
+ network 10.1.1.8/30 area 0
+ network 1.1.1.1/32 area 0
 EOF
 
-# Start FRR
-/etc/init.d/frr start
+/etc/init.d/frr restart

@@ -1,0 +1,3 @@
+router-arakhurs-1 -> eth0 -> eth0 -> router-arakhurs-2 -> eth1 -> eth1 -> host-arakhurs-1
+router-arakhurs-1 -> eth1 -> eth1 -> router-arakhurs-3 -> eth0 -> eth0 -> host-arakhurs-2
+router-arakhurs-1 -> eth2 -> eth2 -> router-arakhurs-4 -> eth0 -> eth0 -> host-arakhurs-3
